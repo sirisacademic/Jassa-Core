@@ -79,7 +79,7 @@ describe('Basics', function() {
 
         query.toString().should.be.equal('Select * {?s ?p ?o}  Limit 10');
     });
-
+    /*
     it('#Sparql service should get results', function(done) {
         var sparqlService = createSparqlService();
 
@@ -107,7 +107,7 @@ describe('Basics', function() {
                 done();
             });
     });
-
+    */
     /*
     it('#Sparql Items should be filtered by regex', function(done) {
         var langs = ['en', 'de', ''];

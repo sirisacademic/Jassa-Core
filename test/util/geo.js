@@ -82,6 +82,5 @@ describe('Geo Tests', function() {
         });
 
     });
-
 });
 
