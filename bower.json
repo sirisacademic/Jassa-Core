@@ -1,6 +1,5 @@
 {
   "name": "jassa",
-  "version": "v0.9.0-SNAPSHOT",
   "homepage": "https://github.com/sirisacademic/Jassa-Core",
   "authors": [
     "Claus Stadler <cstadler@informatik.uni-leipzig.de>"
@@ -9,7 +8,7 @@
   "main": "dist/jassa.min.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/sirisacademic/Jassa-Core"
+    "url": "git://github.com/sirisacademic/Jassa-Core#master"
   },
   "dependencies": {
     "bluebird": "2.3.5"
