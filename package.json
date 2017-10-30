@@ -5,8 +5,7 @@
   "main": "./lib/index.js",
   "scripts": {
     "test": "gulp test",
-    "precommit": "gulp lint"/*,
-    "prepush": "gulp mocha"*/
+    "precommit": "gulp lint"
   },
   "repository": {
     "type": "git",
