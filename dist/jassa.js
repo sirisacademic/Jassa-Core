@@ -18062,19 +18062,7 @@ var AggregatorSpecification = Class.create({
 
 
     getAggregationNameAs : function() {
-        return this.aggregationNameAs?   this.aggregationNameAs : (this.aggregationType + '_' + this.varName)
-    },
-    
-    getVarName : function() {
-        return this.varName;
-    },
-
-    getIsDistinct : function() {
-        return this.isDistinct;        
-    },
-
-    getAggregationType : function() {
-        return this.getAggregationType;
+        return this.aggregationNameAs?   this.aggregationNameAs : (this.aggregationType + '_' + this.varName);
     }
 });
 
