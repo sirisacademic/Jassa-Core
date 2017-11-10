@@ -9515,6 +9515,7 @@ var AjaxUtils = {
 
         var result = {
             url: baseUrl,
+            type: 'POST',
             dataType: 'json',
             crossDomain: true,
             traditional: true,
@@ -17782,7 +17783,7 @@ var AggAvg = Class.create(AggregatorBase, {
     },
 
     copySubstitute: function(fnNodeMap) {
-        return new AggAvg();
+        return new AggAvg(this.expr);
     },
 
     getVarsMentioned: function() {
@@ -17803,7 +17804,7 @@ var AggAvgDistinct = Class.create(AggregatorBase, {
     },
 
     copySubstitute: function(fnNodeMap) {
-        return new AggAvgDistinct();
+        return new AggAvgDistinct(this.expr);
     },
 
     getVarsMentioned: function() {
@@ -17824,7 +17825,7 @@ var AggCount = Class.create(AggregatorBase, {
     },
 
     copySubstitute: function(fnNodeMap) {
-        return new AggCount();
+        return new AggCount(this.expr);
     },
 
     getVarsMentioned: function() {
@@ -17845,7 +17846,7 @@ var AggCountDistinct = Class.create(AggregatorBase, {
     },
 
     copySubstitute: function(fnNodeMap) {
-        return new AggCountDistinct();
+        return new AggCountDistinct(this.expr);
     },
 
     getVarsMentioned: function() {
@@ -17866,7 +17867,7 @@ var AggMax = Class.create(AggregatorBase, {
     },
 
     copySubstitute: function(fnNodeMap) {
-        return new AggMax();
+        return new AggMax(this.expr);
     },
 
     getVarsMentioned: function() {
@@ -17887,7 +17888,7 @@ var AggMaxDistinct = Class.create(AggregatorBase, {
     },
 
     copySubstitute: function(fnNodeMap) {
-        return new AggMaxDistinct();
+        return new AggMaxDistinct(this.expr);
     },
 
     getVarsMentioned: function() {
@@ -17908,7 +17909,7 @@ var AggMin = Class.create(AggregatorBase, {
     },
 
     copySubstitute: function(fnNodeMap) {
-        return new AggMin();
+        return new AggMin(this.expr);
     },
 
     getVarsMentioned: function() {
@@ -17929,7 +17930,7 @@ var AggMinDistinct = Class.create(AggregatorBase, {
     },
 
     copySubstitute: function(fnNodeMap) {
-        return new AggMinDistinct();
+        return new AggMinDistinct(this.expr);
     },
 
     getVarsMentioned: function() {
@@ -17950,7 +17951,7 @@ var AggSum = Class.create(AggregatorBase, {
     },
 
     copySubstitute: function(fnNodeMap) {
-        return new AggSum();
+        return new AggSum(this.expr);
     },
 
     getVarsMentioned: function() {
@@ -17971,7 +17972,7 @@ var AggSumDistinct = Class.create(AggregatorBase, {
     },
 
     copySubstitute: function(fnNodeMap) {
-        return new AggSumDistinct();
+        return new AggSumDistinct(this.expr);
     },
 
     getVarsMentioned: function() {
@@ -18049,6 +18050,8 @@ var AggregatorFactory = {
 module.exports = AggregatorFactory;
 },{"../../ext/Class":2,"../expr/ExprVar":314,"./AggAvg":257,"./AggAvgDistinct":258,"./AggCount":259,"./AggCountDistinct":260,"./AggMax":261,"./AggMaxDistinct":262,"./AggMin":263,"./AggMinDistinct":264,"./AggSum":265,"./AggSumDistinct":266}],269:[function(require,module,exports){
 var Class = require('../../ext/Class');
+var NodeFactory = require('../../rdf/NodeFactory');
+var NodeUtils = require('../../rdf/NodeUtils');
 
 // constructor
 var AggregatorSpecification = Class.create({
@@ -18060,7 +18063,7 @@ var AggregatorSpecification = Class.create({
         
         // if var aggVarAs is ommited, create it based on 
         // the source var and the aggregation function
-        this.aggVarAs = aggVarAs || rdf.NodeFactory.createVar(aggregationType + '_' + v.getName());
+        this.aggVarAs = aggVarAs || NodeFactory.createVar(aggregationType + '_' + v.getName());
     },
 
     getVarsMentioned: function() {
@@ -18080,7 +18083,7 @@ var AggregatorSpecification = Class.create({
 });
 
 module.exports = AggregatorSpecification;
-},{"../../ext/Class":2}],270:[function(require,module,exports){
+},{"../../ext/Class":2,"../../rdf/NodeFactory":99,"../../rdf/NodeUtils":100}],270:[function(require,module,exports){
 var Class = require('../../ext/Class');
 
 var Element = Class.create({
