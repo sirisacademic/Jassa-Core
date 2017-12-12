@@ -10422,9 +10422,9 @@ var VarUtils = require('../sparql/VarUtils');
 var ServiceUtils = require('./ServiceUtils');
 var IteratorArray = require('../util/collection/IteratorArray');
 var ResultSetArrayIteratorBinding = require('./result_set/ResultSetArrayIteratorBinding');
-var SparqlIo = require('../io/SparqlIo');
-
 var shared = require('../util/shared');
+var QueryUtils = require('../sparql/QueryUtils');
+
 var Promise = shared.Promise;
 
 var TableServiceUtils = {
@@ -10500,9 +10500,9 @@ var TableServiceUtils = {
         // prefix mapping
         var qe = sparqlService.createQueryExecution(
             (prefixMapping)?
-                SparqlIo.serializePrefixMapping(prefixMapping) + ' ' + query.toString() : query
+                QueryUtils.prettifyQueryString(query, prefixMapping) : query 
         );
-
+                
         var result = qe.execSelect().then(function(rs) {
             var data = [];
 
@@ -10599,7 +10599,7 @@ var TableServiceUtils = {
 
 module.exports = TableServiceUtils;
 
-},{"../io/SparqlIo":92,"../sparql/VarUtils":257,"../util/collection/IteratorArray":406,"../util/shared":416,"./ServiceUtils":141,"./result_set/ResultSetArrayIteratorBinding":201,"lodash.foreach":491,"lodash.uniq":507}],144:[function(require,module,exports){
+},{"../sparql/QueryUtils":250,"../sparql/VarUtils":257,"../util/collection/IteratorArray":406,"../util/shared":416,"./ServiceUtils":141,"./result_set/ResultSetArrayIteratorBinding":201,"lodash.foreach":491,"lodash.uniq":507}],144:[function(require,module,exports){
 var QuadUtils = require('../sparql/QuadUtils');
 var UpdateDataInsert = require('../sparql/update/UpdateDataInsert');
 var UpdateDataDelete = require('../sparql/update/UpdateDataDelete');
@@ -17106,6 +17106,7 @@ var ElementGroup = require('./element/ElementGroup');
 var ElementUnion = require('./element/ElementUnion');
 var ElementSubQuery = require('./element/ElementSubQuery');
 var ElementTriplesBlock = require('./element/ElementTriplesBlock');
+var SparqlIo = require('../io/SparqlIo');
 
 //var VarUtils = require('./VarUtils');
 
@@ -17250,13 +17251,56 @@ var QueryUtils = {
         result.getProject().add(o);
 
         return result;
+    },
+
+    /**
+     * Obtain a 'pretty' string from a node object, under an optional prefixMapping.
+     * Pretty means, that Uris will be converted to their short form (if a prefix mapping applies) or
+     * their local name (otherwise).
+     */
+    prettifyQueryString: function(query, prefixMapping) {
+        var queryString = query.toString();
+
+        if(prefixMapping) {
+            // if there is a prefixMapping create the query execution 
+            // from the query string, which will include the serialized
+            // prefix mapping. In the query string prettify the nodes
+            // so all the URIs are in its short form
+            Object.keys(prefixMapping.prefixes).forEach(function(prefix) {
+                
+                var uri = prefixMapping.getNsPrefixURI(prefix);
+            
+                //escape all forward slashes in the uri string so the uri can be used in a RegExp
+                var uriEscaped = uri.replace(/\//g, '\\/');
+                
+                // between the '<'uri and the '>', match any group of 
+                // alphanumeric characters, including minus sign. This set of characters
+                // should include all characters enabled to name nodes
+                var regExp = new RegExp('<' + uriEscaped + '[\\w\-]+>', 'gi');
+            
+                // do replacement:
+                // from <URI#whatever> to prefix:whatever
+                queryString = queryString.replace(regExp, function(matchedString) {
+                    // get the matching substring we looked for with
+                    // the regExp (the \w+ part)
+                    var match = matchedString.substring(
+                        matchedString.lastIndexOf('#') + 1, 
+                        matchedString.lastIndexOf('>')
+                    );
+                    return prefix + ':' + match; 
+                });
+            });
+            queryString = SparqlIo.serializePrefixMapping(prefixMapping) + ' ' + queryString;
+        }
+
+        return queryString;
     }
 
 };
 
 module.exports = QueryUtils;
 
-},{"../rdf/Triple":103,"../util/ArrayUtils":381,"./Query":248,"./agg/AggCount":260,"./element/ElementFilter":273,"./element/ElementGroup":274,"./element/ElementSubQuery":278,"./element/ElementTriplesBlock":279,"./element/ElementUnion":280,"./expr/E_OneOf":304,"./expr/ExprAggregator":308,"./expr/ExprVar":316}],251:[function(require,module,exports){
+},{"../io/SparqlIo":92,"../rdf/Triple":103,"../util/ArrayUtils":381,"./Query":248,"./agg/AggCount":260,"./element/ElementFilter":273,"./element/ElementGroup":274,"./element/ElementSubQuery":278,"./element/ElementTriplesBlock":279,"./element/ElementUnion":280,"./expr/E_OneOf":304,"./expr/ExprAggregator":308,"./expr/ExprVar":316}],251:[function(require,module,exports){
 var Class = require('../ext/Class');
 
 var ElementUtils = require('./ElementUtils');
