@@ -8960,6 +8960,7 @@ module.exports = Node_Literal;
 },{"../../ext/Class":2,"../../util/ObjectUtils":389,"./Node_Concrete":115}],118:[function(require,module,exports){
 var Class = require('../../ext/Class');
 var Node_Concrete = require('./Node_Concrete');
+var NodeUtils = require('../NodeUtils');
 
 var ObjectUtils = require('../../util/ObjectUtils');
 
@@ -8993,12 +8994,16 @@ var Node_Uri = Class.create(Node_Concrete, {
             this.uri === that.uri;
 
         return result;
+    },
+
+    copySubstitute: function(fnNodeMap) {
+        return NodeUtils.getSubstitute(this, fnNodeMap);
     }
 });
 
 module.exports = Node_Uri;
 
-},{"../../ext/Class":2,"../../util/ObjectUtils":389,"./Node_Concrete":115}],119:[function(require,module,exports){
+},{"../../ext/Class":2,"../../util/ObjectUtils":389,"../NodeUtils":101,"./Node_Concrete":115}],119:[function(require,module,exports){
 var Class = require('../../ext/Class');
 var Node_Fluid = require('./Node_Fluid');
 
@@ -17858,12 +17863,7 @@ var AggAvg = Class.create(AggregatorBase, {
 
     copySubstitute: function(fnNodeMap) {
         return new AggAvg(this.expr);
-    },
-
-    getVarsMentioned: function() {
-        return this.expr.getVarsMentioned();
     }
-
 });
 
 module.exports = AggAvg;
@@ -17879,12 +17879,7 @@ var AggAvgDistinct = Class.create(AggregatorBase, {
 
     copySubstitute: function(fnNodeMap) {
         return new AggAvgDistinct(this.expr);
-    },
-
-    getVarsMentioned: function() {
-        return this.expr.getVarsMentioned();
     }
-
 });
 
 module.exports = AggAvgDistinct;
@@ -17900,12 +17895,7 @@ var AggCount = Class.create(AggregatorBase, {
 
     copySubstitute: function(fnNodeMap) {
         return new AggCount(this.expr);
-    },
-
-    getVarsMentioned: function() {
-        return this.expr.getVarsMentioned();
     }
-
 });
 
 module.exports = AggCount;
@@ -17921,12 +17911,7 @@ var AggCountDistinct = Class.create(AggregatorBase, {
 
     copySubstitute: function(fnNodeMap) {
         return new AggCountDistinct(this.expr);
-    },
-
-    getVarsMentioned: function() {
-        return this.expr.getVarsMentioned();
     }
-
 });
 
 module.exports = AggCountDistinct;
@@ -17942,12 +17927,7 @@ var AggMax = Class.create(AggregatorBase, {
 
     copySubstitute: function(fnNodeMap) {
         return new AggMax(this.expr);
-    },
-
-    getVarsMentioned: function() {
-        return this.expr.getVarsMentioned();
     }
-
 });
 
 module.exports = AggMax;
@@ -17963,12 +17943,7 @@ var AggMaxDistinct = Class.create(AggregatorBase, {
 
     copySubstitute: function(fnNodeMap) {
         return new AggMaxDistinct(this.expr);
-    },
-
-    getVarsMentioned: function() {
-        return this.expr.getVarsMentioned();
     }
-
 });
 
 module.exports = AggMaxDistinct;
@@ -17984,12 +17959,7 @@ var AggMin = Class.create(AggregatorBase, {
 
     copySubstitute: function(fnNodeMap) {
         return new AggMin(this.expr);
-    },
-
-    getVarsMentioned: function() {
-        return this.expr.getVarsMentioned();
     }
-
 });
 
 module.exports = AggMin;
@@ -18005,12 +17975,7 @@ var AggMinDistinct = Class.create(AggregatorBase, {
 
     copySubstitute: function(fnNodeMap) {
         return new AggMinDistinct(this.expr);
-    },
-
-    getVarsMentioned: function() {
-        return this.expr.getVarsMentioned();
     }
-
 });
 
 module.exports = AggMinDistinct;
@@ -18026,12 +17991,7 @@ var AggSum = Class.create(AggregatorBase, {
 
     copySubstitute: function(fnNodeMap) {
         return new AggSum(this.expr);
-    },
-
-    getVarsMentioned: function() {
-        return this.expr.getVarsMentioned();
     }
-
 });
 
 module.exports = AggSum;
@@ -18047,12 +18007,7 @@ var AggSumDistinct = Class.create(AggregatorBase, {
 
     copySubstitute: function(fnNodeMap) {
         return new AggSumDistinct(this.expr);
-    },
-
-    getVarsMentioned: function() {
-        return this.expr.getVarsMentioned();
     }
-
 });
 
 module.exports = AggSumDistinct;
@@ -18069,7 +18024,7 @@ var AggregatorBase = Class.create({
     },
 
     getVarsMentioned: function() {
-        return this.expr.getVarsMentioned();
+        return (this.expr)? this.expr.getVarsMentioned() : [];
     },
 
     toString : function() {
@@ -18101,23 +18056,28 @@ var ExprVar = require('../expr/ExprVar');
 // constructor
 var AggregatorFactory = {
     createAvg: function(distinct, v) {
-        return distinct?    new AggAvgDistinct(new ExprVar(v)) : new AggAvg(new ExprVar(v));
+        var expr = v?   new ExprVar(v) : undefined;
+        return distinct?    new AggAvgDistinct(expr) : new AggAvg(expr);
     },
 
     createCount: function(distinct, v) {
-        return distinct?    new AggCountDistinct(new ExprVar(v)) : new AggCount(new ExprVar(v));
+        var expr = v?   new ExprVar(v) : undefined;
+        return distinct?    new AggCountDistinct(expr) : new AggCount(expr);
     },
 
     createMax: function(distinct, v) {
-        return distinct?    new AggMaxDistinct(new ExprVar(v)) : new AggMax(new ExprVar(v));
+        var expr = v?   new ExprVar(v) : undefined;
+        return distinct?    new AggMaxDistinct(expr) : new AggMax(expr);
     },
 
     createMin: function(distinct, v) {
-        return distinct?    new AggMinDistinct(new ExprVar(v)) : new AggMin(new ExprVar(v));
+        var expr = v?   new ExprVar(v) : undefined;
+        return distinct?    new AggMinDistinct(expr) : new AggMin(expr);
     },
 
     createSum: function(distinct, v) {
-        return distinct?    new AggSumDistinct(new ExprVar(v)) : new AggSum(new ExprVar(v));
+        var expr = v?   new ExprVar(v) : undefined;
+        return distinct?    new AggSumDistinct(expr) : new AggSum(expr);
     }
 };
 
