@@ -8912,6 +8912,7 @@ var Node_Literal = Class.create(Node_Concrete, {
     getLiteral: function() {
         return this.literalLabel;
     },
+
     getLiteralValue: function() {
         return this.literalLabel.getValue();
     },
@@ -16575,8 +16576,12 @@ var NodeValueUtils = {
         return NodeValueUtils.createLiteral(str, xsd.xstring.getUri());
     },
 
-    makeInteger: function(val) {
+    makeInt: function(val) {
         return NodeValueUtils.createLiteral(val, xsd.xint.getUri());
+    },
+
+    makeInteger: function(val) {
+        return NodeValueUtils.createLiteral(val, xsd.xinteger.getUri());
     },
 
     makeDecimal: function(val) {
