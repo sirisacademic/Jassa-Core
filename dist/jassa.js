@@ -19846,6 +19846,10 @@ var ExprFunctionN = Class.create(ExprFunctionBase, {
         this.args = args;
     },
 
+    copySubstitute: function(fnNodeMap) {
+        return new ExprFunctionN(this.name, this.args);
+    },
+
     getArgs: function() {
         return this.args;
     },
