@@ -19137,7 +19137,7 @@ var E_GreaterThan = Class.create(ExprFunction2, {
     },
 
     copySubstitute: function(fnNodeMap) {
-        return new E_GreaterThan(this.left.copySubstitute(fnNodeMap), this.right.copySubstitute(fnNodeMap));
+        return new E_GreaterThan(this.left, this.right);
     },
 
     copy: function(args) {
@@ -19270,7 +19270,7 @@ var E_LessThan = Class.create(ExprFunction2, {
     },
 
     copySubstitute: function(fnNodeMap) {
-        return new E_LessThan(this.left.copySubstitute(fnNodeMap), this.right.copySubstitute(fnNodeMap));
+        return new E_LessThan(this.left, this.right);
     },
 
     copy: function(args) {
@@ -19779,6 +19779,10 @@ var ExprFunction2 = Class.create(ExprFunctionBase, {
             this.left,
             this.right,
         ];
+    },
+
+    copySubstitute: function(fnNodeMap) {
+        return new ExprFunction2(this.name, this.args);
     },
 
     copy: function(args) {
