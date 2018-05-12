@@ -50,7 +50,7 @@
     // Personal styling preferences.
     "newcap": true, // Require capitalization of all constructor functions e.g. `new F()`.
     "noempty": true, // Prohibit use of empty blocks.
-    "nonbsp": true, // Prohibit use of non-breaking space.
+    "nonbsp": false, // Prohibit use of non-breaking space.
     "nonew": true, // Prohibit use of constructors for side-effects.
     "plusplus": false, // Prohibit use of `++` & `--`.
     "sub": false, // Tolerate all forms of subscript notation besides dot notation e.g. `dict["key"]` instead of `dict.key`.
